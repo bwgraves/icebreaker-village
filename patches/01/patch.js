@@ -18,7 +18,66 @@ Village.patch({
   name: "Benjamino",
 
   // ☐ 1. Add your 8-bit self (front yard, about 12×20 pixels).
-  // character: { pixels: [ ... ], palette: { ... } },
+  character: {
+    fps: 2,
+    palette: {
+      h: "#6b4226", // messy brown hair
+      s: "#f2c29b", // skin
+      g: "#111111", // black glasses
+      e: "#222222", // eyes
+      m: "#c0504d", // mouth
+      j: "#8a8d93", // grey jumper
+      k: "#6f7279", // jumper shadow
+      n: "#6e6659", // grey-brown jeans
+      b: "#3a2a1e", // shoes
+    },
+    frames: [
+      [
+        "...h.hh.h...",
+        "..hhhhhhhhh.",
+        ".hhhhhhhhhhh",
+        ".hhssssssshh",
+        ".ggggsgggg..",
+        ".gesgsgesg..",
+        ".hssssssssh.",
+        "...ssmmss...",
+        "....ssss....",
+        "..jjjjjjjj..",
+        ".jjjjjjjjjj.",
+        ".jjjkkkkjjj.",
+        ".sjjjjjjjjs.",
+        ".sjjjjjjjjs.",
+        "..jjjjjjjj..",
+        "..nnnnnnnn..",
+        "..nnn..nnn..",
+        "..nnn..nnn..",
+        "..nnn..nnn..",
+        "..bbb..bbb..",
+      ],
+      [
+        "...h.hh.h...",
+        "..hhhhhhhhh.",
+        ".hhhhhhhhhhh",
+        ".hhssssssshh",
+        ".ggggsgggg..",
+        ".gssgsgssg..",
+        ".hssssssssh.",
+        "...ssmmss...",
+        "....ssss...s",
+        "..jjjjjjjj.s",
+        ".jjjjjjjjjjs",
+        ".jjjkkkkjjj.",
+        ".sjjjjjjjjj.",
+        ".sjjjjjjjjj.",
+        "..jjjjjjjj..",
+        "..nnnnnnnn..",
+        "..nnn..nnn..",
+        "..nnn..nnn..",
+        "..nnn..nnn..",
+        "..bbb..bbb..",
+      ],
+    ],
+  },
 
   // ☐ 2. Build yourself a house (house zone is 152×56, sits in the middle).
   // house: { draw(g, t) { ... } },
