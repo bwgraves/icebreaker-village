@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Icebreaker Village</title>
+    <meta name="description" content="An 8-bit village where everyone builds their own patch." />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏡</text></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <canvas id="village" aria-label="An 8-bit village. Drag to explore."></canvas>
+
+    <div class="hud">
+      <button id="home-btn" class="pixel-btn" title="Back to the welcome sign" >Home</button>
+      <button id="help-btn" class="pixel-btn checklist-btn" title="How to join and your to-do list">Checklist</button>
+    </div>
+
+    <div id="intro" class="modal" role="dialog" aria-modal="true" aria-labelledby="intro-title" hidden>
+      <div class="modal-box">
+        <h1 id="intro-title">Welcome to Icebreaker Village!</h1>
+        <p>Everyone here gets their own square patch of land. Your job: make it <em>yours</em>, and use it to tell everyone a little about you.</p>
+
+        <h2>How to move in</h2>
+        <ol>
+          <li>Check out today's branch (your host will share the name) and <code>git pull</code>.</li>
+          <li>
+            Open your AI coding agent in this repo and tell it:
+            <div class="prompt-row">
+              <code id="agent-prompt">Read AGENTS.md and add me to Icebreaker Village.</code>
+              <button id="copy-prompt" class="pixel-btn small" type="button">Copy</button>
+            </div>
+          </li>
+          <li>Refresh this page to watch your patch appear.</li>
+        </ol>
+
+        <h2>Your to-do list</h2>
+        <ul class="checklist">
+          <li>Add your 8-bit self to your patch and style yourself</li>
+          <li>Build yourself a house</li>
+          <li>Zhuzh your back garden</li>
+          <li>Give your character a thought bubble</li>
+          <li>Adopt a pet</li>
+        </ul>
+
+        <p class="hint">Drag to explore · scroll or pinch to zoom · <strong>Home</strong> takes you back to the sign · the <strong>Checklist</strong> button (bottom right) brings this back any time</p>
+        <button id="intro-close" class="pixel-btn primary" type="button">Let's go!</button>
+      </div>
+    </div>
+
+    <script src="src/pixel.js"></script>
+    <script src="src/world.js"></script>
+    <script src="src/defaults.js"></script>
+    <script src="src/patch-api.js"></script>
+    <script src="src/loader.js"></script>
+    <script src="src/modal.js"></script>
+    <script src="src/engine.js"></script>
+  </body>
+</html>
