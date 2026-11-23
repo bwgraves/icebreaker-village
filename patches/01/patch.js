@@ -230,6 +230,39 @@ Village.patch({
   thought: "Sometimes I thinks, sometimes I just sits",
 
   // ☐ 5. Adopt a pet (front yard, about 10×8 pixels).
-  // pet: { name: "...", pixels: [ ... ], palette: { ... }, wander: true },
+  pet: {
+    name: "Molly",
+    fps: 3,
+    palette: {
+      b: "#1e1e22", // black labrador coat
+      d: "#35353c", // floppy ear
+      e: "#ffffff", // eye glint
+      n: "#5a5a63", // nose
+      t: "#e8708a", // tongue
+    },
+    frames: [
+      [
+        "......bbb.",
+        "b....bbbbb",
+        "bbbbbdbebb",
+        ".bbbbdbbbn",
+        ".bbbbbbbtb",
+        ".bbbbbbbb.",
+        ".b.b..b.b.",
+        ".b.b..b.b.",
+      ],
+      [
+        "......bbb.",
+        ".....bbbbb",
+        ".bbbbdbebb",
+        "bbbbbdbbbn",
+        "bbbbbbbbtb",
+        ".bbbbbbbb.",
+        ".b.b..b.b.",
+        ".b.b..b.b.",
+      ],
+    ],
+    wander: true,
+  },
 });
 })();
