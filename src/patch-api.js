@@ -44,6 +44,21 @@
       px(x, y, color) {
         rect(x, y, 1, 1, color);
       },
+      // Filled pixel circle centred on (cx, cy).
+      circle(cx, cy, r, color) {
+        r = Math.max(0, Math.round(r));
+        for (let dy = -r; dy <= r; dy++) {
+          const dx = Math.round(Math.sqrt(r * r - dy * dy));
+          rect(cx - dx, cy + dy, dx * 2 + 1, 1, color);
+        }
+      },
+      // Filled triangle pointing up, inside the box (x, y, w, h). Great for roofs and trees.
+      triangle(x, y, w, h, color) {
+        for (let i = 0; i < h; i++) {
+          const rw = Math.max(1, Math.round((w * (i + 1)) / h));
+          rect(x + Math.round((w - rw) / 2), y + i, rw, 1, color);
+        }
+      },
       // g.sprite(spriteObj, x, y, opts) or g.sprite(pixels, palette, x, y, opts)
       sprite(a, b, c, d, e) {
         if (Array.isArray(a)) return P.draw(ctx, a, b, c, d, e);

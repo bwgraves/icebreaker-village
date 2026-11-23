@@ -1,129 +1,93 @@
-# AGENTS.md: How to add someone to Icebreaker Village
+# AGENTS.md: Add someone to Icebreaker Village
 
-You're helping a person move into **Icebreaker Village**, a static 8‑bit village used as a team icebreaker. Each person gets one square patch. They put themself, a house, a back garden, a thought bubble and a pet in it. Everyone is pushing to the same git branch at the same time, so follow the claiming steps below carefully.
+You're helping a person move into **Icebreaker Village**, a static 8‑bit village used as a quick team icebreaker. Each person gets a square patch containing their 8‑bit self, a house, a back garden, a thought bubble and a pet.
 
-**The point is conversation and creativity.** The person should dream their patch up; your job is to bring it to life. Turn their answers into their patch, and don't invent things for them.
+**This should take a couple of minutes, not twenty.**
+- Ask everything in one message, then build the whole patch in one go and publish it with one script.
+- Good enough is perfect. It's a bit of fun, not a portfolio piece.
 
-## How to ask questions (important)
+## Do NOT
 
-- **Ask open-ended questions in plain text, and let the person type their own answer.**
-  - Good: *"Describe your dream house. It can be anything at all."*
-  - Bad: *"Which house would you like? (a) cottage (b) castle (c) treehouse"*
-- **Never give a list of options, a multiple-choice menu or numbered choices.** If your harness has a question or option-picker tool, don't use it here. Just write the question as a normal message and wait for the reply.
-- **Don't suggest examples up front.** They anchor people towards the same few ideas. Only offer a gentle nudge if the person says they're stuck, and even then keep it to one playful prompt, not a menu. For example: *"What would 8-year-old you have wanted?"*
-- **Ask one question at a time.** Once they've answered, a short follow-up is fine (*"Ooh, what colour is the door?"*).
-- **Take what they say and run with it, however silly.** A house shaped like a teapot is a great answer.
+- ❌ Take screenshots, open a browser, start a server or try to "check how it looks". The person will refresh the page themselves.
+- ❌ Read `src/`, `docs/`, `index.html`, `README.md` or other people's patches. `patches/_template/patch.js` has everything you need, including an API cheat sheet.
+- ❌ Do git by hand. The scripts handle claiming a plot, conflicts and retries.
+- ❌ Offer multiple-choice options, or use a question/option-picker tool. Ask open questions in plain text and let the person type.
+- ❌ Edit anything outside the person's own patch folder.
+- ❌ Polish or iterate unprompted. Build it once, publish, and offer tweaks.
 
-## Ground rules
+## The fast path (4 steps)
 
-1. **Only create or edit files inside your person's own `patches/NN/` folder.** Never touch `index.html`, `src/`, `docs/`, other people's patches or this file. That's what keeps merge conflicts down to a single, obvious case.
-2. Draw everything in code: pixel-maps or `g.rect` calls. No external images, network requests or libraries.
-3. Keep it wholesome and friendly. Everyone in the meeting can see it.
-4. Never work on `main`. Use the session branch the host shared (for example `icebreaker/2026-11-23-design-team`).
+### 1. Ask everything in ONE message
 
-## Step 1: Get up to date
+Send this, word for word or close to it, as a normal chat message:
+
+> Welcome to Icebreaker Village! 🏡 Answer these in a few words each. Anything goes, the sillier the better:
+> 1. What name should go on your name plate?
+> 2. What do you look like as an 8‑bit character?
+> 3. Describe your dream house.
+> 4. What's in your back garden?
+> 5. What's on your mind? (This goes in your thought bubble.)
+> 6. Tell me about your pet, real or imaginary. What's it called?
+
+- Don't add examples or suggestions. They anchor everyone to the same ideas.
+- If an answer is blank or "dunno", invent something fun yourself rather than asking again.
+
+### 2. Build the draft
 
 ```sh
-git fetch origin
-git checkout <session-branch>
-git pull --rebase
+mkdir -p patches/_draft && cp patches/_template/patch.js patches/_draft/patch.js
 ```
 
-If you don't know the session branch name, ask the person.
+Edit `patches/_draft/patch.js` in a single pass to match their answers. The template already draws a complete patch, so:
 
-## Step 2: Ask for a name
+- **Name:** set `name`.
+- **Character:** change the palette colours (hair, skin, clothes). Add a quick feature if they mentioned one (glasses, hat, beard) by editing a few rows and adding a palette letter.
+- **House, garden:** change colours and details. If their idea is different (a castle, a boat, a pond), replace that `draw()` with a few `g.rect`, `g.circle` and `g.triangle` calls. Shapes over pixel-perfection.
+- **Thought:** use their words, up to about 70 characters.
+- **Pet:** recolour, or redraw a small pixel-map facing right. Set its `name`.
 
-Ask: *"What name should go on your name plate?"* Any first name or nickname is fine, up to about 18 characters.
+Keep the `(() => { ... })();` wrapper. Keep pixel-map rows the same length, and give every character a palette colour.
 
-## Step 3: Claim a patch (do this straight away, before any drawing)
+### 3. Publish it
 
-1. List the taken slots, both locally and on the remote:
-   ```sh
-   ls patches
-   git ls-tree --name-only origin/<session-branch> patches/
-   ```
-   Numbered folders (`01`, `02`, …) are taken. Ignore `_template` and `_example`.
-2. Pick the **lowest free two-digit number** `NN`. The folder name must be just the number: never `03-sam`, or two people could end up on the same plot without git noticing.
-3. Create the patch and set the name:
-   ```sh
-   cp -r patches/_template patches/NN
-   # edit patches/NN/patch.js: name: "Sam"
-   ```
-4. Commit and push **immediately**. Claiming early makes clashes much less likely.
-   ```sh
-   git add patches/NN
-   git commit -m "Claim patch NN for Sam"
-   git push origin <session-branch>
-   ```
+```sh
+bash scripts/move-in.sh
+```
 
-### If the push fails with a permissions error (403 / "Permission denied")
+This script:
 
-The person hasn't been added as a collaborator on the GitHub repo, or hasn't accepted the invite yet. Stop and tell them to ask the host to add them as a collaborator, then accept the invite at `https://github.com/<owner>/icebreaker-village/invitations`. Their commit is safe locally: once they have access, just push again. Don't try to work around it.
+- syntax-checks the draft;
+- pulls the latest changes;
+- takes the next free plot number and commits;
+- pushes, and automatically retries with the next number if someone else moved in at the same moment.
 
-### If the push is rejected (someone else pushed first)
+It prints `MOVED IN: … patch NN`. If it reports a syntax error, fix it and run it again.
 
-Run `git pull --rebase`.
+The scripts only need git and bash. If Node is installed they also syntax-check the patch; if not, that check is skipped, so don't install anything. Before publishing, take a few seconds to eyeball your brackets and commas, because a broken patch shows an "OOPS!" sign until it's fixed.
 
-- **No conflict:** push again. You're done.
-- **Conflict on `patches/NN/patch.js`** (git calls it *"both added"*): someone else claimed `NN` first. Move to the next free slot:
-  ```sh
-  git rebase --abort
-  cp -r patches/NN "$TMPDIR/my-patch"           # save your work somewhere outside the repo
-  git diff --stat origin/<session-branch> HEAD  # check: your only changes should be in patches/NN
-  git reset --hard origin/<session-branch>      # throw away only your local claim commit(s)
-  ls patches                                    # pick the next free number MM
-  cp -r "$TMPDIR/my-patch" patches/MM
-  git add patches/MM
-  git commit -m "Claim patch MM for Sam"
-  git push origin <session-branch>
-  ```
-  Repeat if it happens again. Never edit, move or delete another person's folder to resolve a conflict.
+### 4. Tell them and finish
 
-The same recovery works later on. All of your person's work lives in one folder, so it can always be copied to a new number. The loader works out the slot from the folder name, so nothing inside `patch.js` needs to change.
+Tell them their patch number and to open or refresh `index.html` (double-click it). Offer one round of tweaks.
 
-## Step 4: The checklist
+For tweaks, edit `patches/NN/patch.js`, then run:
 
-Do these in order. For each one: ask an open question (see **How to ask questions** above), build it, let the person look, then commit and push (`git pull --rebase` first).
+```sh
+bash scripts/save.sh "Sam adds a moat"
+```
 
-| # | Task | Ask something like | Where it goes |
-| --- | --- | --- | --- |
-| 1 | **Add your 8‑bit self and style yourself** | *"How would you like to look in the village? Describe your 8-bit self."* | `character`: about 12×20 pixels in the front yard. Two animation `frames` (a wave, a blink) are a nice touch. |
-| 2 | **Build yourself a house** | *"Describe your dream house. It can be anything at all."* | `house`: a zone of 152×56. Aim for roughly 60 wide. |
-| 3 | **Zhuzh your back garden** | *"What's in your back garden?"* | `garden`: a 152×40 strip at the top. Use `g.rng(seed)` for scattering things. |
-| 4 | **Give your character a thought bubble** | *"What's on your mind? Or what should people ask you about?"* | `thought`: a short string of up to about 70 characters, and emoji work. |
-| 5 | **Adopt a pet** | *"Tell me about your pet, real or imaginary. What's it called?"* | `pet`: about 10×8 pixels, drawn facing right, with `wander: true` to let it roam. |
+## If something goes wrong
 
-Commit messages should be friendly and specific, for example `Sam builds a lighthouse in patch 04`.
+- **"You're on 'main'":** ask the person which session branch the host shared, run `git checkout <branch>`, then run the script again.
+- **"PUSH NOT ALLOWED" (403 / permission denied):** the person isn't a collaborator on the GitHub repo yet. Tell them to ask the host to add them and to accept the invite, then run `bash scripts/move-in.sh` again. Their draft is safe.
+- **"Uncommitted changes outside your draft":** show the person, and ask whether to commit or stash them.
+- **No `bash` available** (rare): do it by hand.
+  1. `git pull --rebase`.
+  2. Copy the draft to the lowest free `patches/NN/` (two digits, number only).
+  3. Commit and push.
+  4. If the push is rejected with a "both added" conflict on that folder, run `git rebase --abort` and `git reset --hard origin/<branch>`, then retry with the next number. Your draft in `patches/_draft/` is gitignored and survives this.
 
-## Step 5: Check it
+## Reference (only if you need it)
 
-Open `index.html` in a browser: double-click it, or run `open index.html` (macOS), `start index.html` (Windows) or `xdg-open index.html` (Linux). There's no server or install step. After changes, just refresh the page.
-
-If you can take screenshots or drive a browser, look at the result yourself. Also check the browser console: errors and pixel-map warnings start with `[Icebreaker Village]`. A part showing an **OOPS!** sign threw an error.
-
-## Reference
-
-- **Full drawing API:** [`docs/patch-api.md`](docs/patch-api.md).
-- **Starting point:** [`patches/_template/patch.js`](patches/_template/patch.js).
-- **Finished example:** [`patches/_example/patch.js`](patches/_example/patch.js). Copy ideas from it, not the whole thing.
-
-Key facts:
-
-- A patch is 160×160 art pixels.
-- Zone-local coordinates: garden 152×40, house 152×56, yard 152×56.
-- Every patch must keep its `(() => { ... })();` wrapper, because all patches share one page.
-- Each element is either `{ pixels, palette }` (or `frames`) or `{ draw(g, t) }`.
-
-## Working on the village itself (not a patch)
-
-If the person is changing the engine rather than adding themselves:
-
-- Everything is plain HTML, CSS and JS in classic `<script>` tags, with no build step and no dependencies. It has to keep working from `file://`, so don't use ES modules or `fetch` for local files.
-- `src/pixel.js`: sprites, text and the random number generator.
-- `src/world.js`: layout, grass, the sign, fences and name plates.
-- `src/patch-api.js`: `Village.patch` and the per-zone rendering with error isolation.
-- `src/loader.js`: probes `patches/NN/patch.js`.
-- `src/engine.js`: the camera, input and render loop.
-- `src/modal.js`: the welcome modal.
-
-Make engine changes on `main`, not on a session branch.
+- **Full drawing API:** `docs/patch-api.md`.
+- **Patch layout:** each patch is 160×160. The zones are garden 152×40 (top), house 152×56 (middle) and yard 152×56 (bottom). The character and pet go in the yard.
+- **Engine:** the engine (`src/`) is plain classic scripts that must keep working from `file://`. Engine changes go on `main`, never on a session branch.
