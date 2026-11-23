@@ -227,7 +227,7 @@ Village.patch({
   },
 
   // ☐ 4. Give your character a thought bubble (keep it short!).
-  // thought: "Ask me about ...",
+  thought: "Sometimes I thinks, sometimes I just sits",
 
   // ☐ 5. Adopt a pet (front yard, about 10×8 pixels).
   // pet: { name: "...", pixels: [ ... ], palette: { ... }, wander: true },
