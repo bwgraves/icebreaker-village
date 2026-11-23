@@ -149,7 +149,82 @@ Village.patch({
   },
 
   // ☐ 3. Zhuzh your back garden (top strip, 152×40).
-  // garden: { draw(g, t) { ... } },
+  garden: {
+    draw(g, t) {
+      // ---- Garage (left) ----
+      g.rect(3, 11, 48, 3, "#555a66");          // roof
+      g.rect(4, 14, 46, 24, "#b8a690");         // walls
+      g.rect(9, 20, 26, 18, "#2b2d33");         // open doorway
+      // car being worked on
+      g.rect(13, 31, 18, 5, "#c0392b");
+      g.rect(17, 28, 10, 3, "#c0392b");
+      g.rect(18, 29, 3, 2, "#9ed0e6");
+      g.rect(22, 29, 3, 2, "#9ed0e6");
+      g.rect(15, 35, 4, 3, "#111111");
+      g.rect(25, 35, 4, 3, "#111111");
+      g.rect(21, 33, 1, 1, "#f5d76e");          // headlight
+      // roller door, rolled up at the top
+      g.rect(9, 20, 26, 4, "#d0d3d8");
+      for (let y = 21; y < 24; y += 2) g.rect(9, y, 26, 1, "#a9adb5");
+      // side door
+      g.rect(40, 26, 7, 12, "#6d4c41");
+      g.px(45, 32, "#e0b030");
+
+      // ---- Hot tub (middle) ----
+      g.rect(58, 28, 34, 10, "#8a5a33");        // wooden body
+      for (let x = 61; x < 92; x += 4) g.rect(x, 28, 1, 10, "#6e4527");
+      g.rect(57, 24, 36, 4, "#b07a47");         // rim
+      g.rect(59, 25, 32, 2, "#4fc3e8");         // water
+      for (let i = 0; i < 5; i++) {             // bubbles
+        const p = (t * 0.8 + i * 0.37) % 1;
+        g.px(62 + i * 6, Math.round(26 - p * 2), "#e8fbff");
+      }
+      for (let i = 0; i < 3; i++) {             // steam
+        const p = (t * 0.4 + i / 3) % 1;
+        g.px(68 + i * 8 + Math.round(Math.sin(p * 5 + i) * 1.5), Math.round(22 - p * 10), `rgba(235,240,245,${0.8 - p * 0.8})`);
+      }
+      g.rect(58, 36, 2, 2, "#5b3a20");
+
+      // ---- Home-made reactor (right): a cheerful DIY cooling tower ----
+      const cx = 122;
+      for (let y = 6; y < 38; y++) {
+        const d = (y - 22) / 16;
+        const hw = Math.round(6 + d * d * 5);
+        g.rect(cx - hw, y, hw * 2, 1, "#b9bcc2");
+        g.rect(cx + hw - 3, y, 3, 1, "#8e929a");
+        g.rect(cx - hw, y, 1, 1, "#dfe1e5");
+      }
+      // hazard stripes at the base
+      for (let x = cx - 10; x < cx + 10; x += 2) {
+        g.rect(x, 34, 2, 3, ((x - cx) / 2) % 2 === 0 ? "#f2c500" : "#222222");
+      }
+      // glowing green core window
+      const glow = 0.6 + 0.4 * Math.sin(t * 3);
+      g.rect(cx - 4, 18, 8, 6, "#222222");
+      g.rect(cx - 3, 19, 6, 4, `rgba(80,255,110,${glow})`);
+      // duct tape patches and a wobbly pipe
+      g.rect(cx - 6, 28, 5, 1, "#9aa0a8");
+      g.rect(cx + 2, 12, 4, 1, "#9aa0a8");
+      g.rect(cx + 10, 30, 8, 2, "#7a7f88");
+      g.rect(cx + 17, 26, 2, 6, "#7a7f88");
+      // steam puffs
+      for (let i = 0; i < 4; i++) {
+        const p = (t * 0.35 + i / 4) % 1;
+        g.px(cx - 3 + i * 2 + Math.round(Math.sin(p * 6 + i) * 2), Math.round(5 - p * 5), `rgba(235,240,245,${0.9 - p * 0.9})`);
+      }
+
+      // ---- A few flowers in the gaps ----
+      const r = g.rng(7);
+      for (const [lo, hi] of [[52, 56], [94, 100], [143, 150]]) {
+        for (let i = 0; i < 2; i++) {
+          const x = Math.floor(lo + r() * (hi - lo));
+          const y = 34 + Math.floor(r() * 4);
+          g.px(x, y, r() < 0.5 ? "#ff7eb6" : "#ffd84d");
+          g.px(x, y + 1, "#3f8f3f");
+        }
+      }
+    },
+  },
 
   // ☐ 4. Give your character a thought bubble (keep it short!).
   // thought: "Ask me about ...",
