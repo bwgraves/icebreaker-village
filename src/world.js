@@ -148,7 +148,6 @@
     const b = villageBounds();
     ctx.fillStyle = pt.dirt;
     ctx.fillRect(b.x, b.y, b.w, b.h);
-    ctx.fillRect(-20, 110, 40, b.y - 110);
     ctx.fillStyle = "rgba(90,60,30,0.18)";
     ctx.fillRect(b.x, b.y, b.w, 1);
     ctx.fillRect(b.x, b.y + b.h - 1, b.w, 1);

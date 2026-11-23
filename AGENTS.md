@@ -90,7 +90,7 @@ Do these in order. For each one: ask an open question (see **How to ask question
 | 1 | **Add your 8‑bit self and style yourself** | *"How would you like to look in the village? Describe your 8-bit self."* | `character`: about 12×20 pixels in the front yard. Two animation `frames` (a wave, a blink) are a nice touch. |
 | 2 | **Build yourself a house** | *"Describe your dream house. It can be anything at all."* | `house`: a zone of 152×56. Aim for roughly 60 wide. |
 | 3 | **Zhuzh your back garden** | *"What's in your back garden?"* | `garden`: a 152×40 strip at the top. Use `g.rng(seed)` for scattering things. |
-| 4 | **Give your character a thought bubble** | *"What's on your mind? Or what should people ask you about?"* | `thought`: a short string of up to about 40 characters, and emoji work. |
+| 4 | **Give your character a thought bubble** | *"What's on your mind? Or what should people ask you about?"* | `thought`: a short string of up to about 70 characters, and emoji work. |
 | 5 | **Adopt a pet** | *"Tell me about your pet, real or imaginary. What's it called?"* | `pet`: about 10×8 pixels, drawn facing right, with `wander: true` to let it roam. |
 
 Commit messages should be friendly and specific, for example `Sam builds a lighthouse in patch 04`.
