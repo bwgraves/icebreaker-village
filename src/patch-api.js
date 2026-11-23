@@ -122,13 +122,17 @@
     return fallback(g);
   }
 
+  const BUBBLE_SIZE = 11;
+  const BUBBLE_LINE = 11;
+  const BUBBLE_MAX_LINES = 4;
+
   function wrap(ctx, text, maxW) {
     const words = String(text).split(/\s+/).filter(Boolean);
     const lines = [];
     let line = "";
     for (const word of words) {
       const test = line ? line + " " + word : word;
-      if (P.measure(ctx, test, 8) <= maxW || !line) line = test;
+      if (P.measure(ctx, test, BUBBLE_SIZE, "body") <= maxW || !line) line = test;
       else {
         lines.push(line);
         line = word;
@@ -140,14 +144,15 @@
 
   function drawThought(ctx, text, anchor, t, slot) {
     const S = W.PATCH;
-    let lines = wrap(ctx, text, 112);
-    if (lines.length > 3) {
-      lines = lines.slice(0, 3);
-      lines[2] = lines[2].replace(/.{0,3}$/, "...");
+    const left = Math.max(anchor.x + 8, 6);
+    let lines = wrap(ctx, text, S - 6 - 12 - left);
+    if (lines.length > BUBBLE_MAX_LINES) {
+      lines = lines.slice(0, BUBBLE_MAX_LINES);
+      lines[BUBBLE_MAX_LINES - 1] = lines[BUBBLE_MAX_LINES - 1].replace(/.{0,3}$/, "...");
     }
-    const tw = Math.max(...lines.map((l) => P.measure(ctx, l, 8)));
+    const tw = Math.max(...lines.map((l) => P.measure(ctx, l, BUBBLE_SIZE, "body")));
     const w = Math.ceil(tw) + 12;
-    const h = lines.length * 11 + 8;
+    const h = lines.length * BUBBLE_LINE + 8;
     const bob = Math.round(Math.sin(t * 1.5 + slot) * 1);
     const x = Math.round(Math.min(Math.max(anchor.x + 8, 6), S - 6 - w));
     const y = Math.round(Math.max(anchor.y - 3 - h, 6)) + bob;
@@ -168,7 +173,15 @@
     ctx.fillStyle = "#fff";
     ctx.fillRect(x + 2, y + 1, w - 4, h - 2);
     ctx.fillRect(x + 1, y + 2, w - 2, h - 4);
-    lines.forEach((l, i) => P.text(ctx, l, x + 6, y + 5 + i * 11, { size: 8, color: ink }));
+    lines.forEach((l, i) =>
+      P.text(ctx, l, x + 6, y + 4 + i * BUBBLE_LINE, { size: BUBBLE_SIZE, font: "body", color: ink })
+    );
+  }
+
+  function firstFreeSlot() {
+    let s = 1;
+    while (V.patches.has(s)) s++;
+    return s;
   }
 
   function renderPatch(ctx, slot, t) {
@@ -179,11 +192,14 @@
 
     ctx.save();
     ctx.translate(r.x, r.y);
-    ctx.fillStyle = pt.lawn;
+    // Claimed plots get a freshly mown lawn; free plots stay wild meadow.
+    ctx.fillStyle = entry ? pt.lawn : pt.grass;
     ctx.fillRect(0, 0, W.PATCH, W.PATCH);
 
     if (!entry) {
-      inZone(ctx, null, "empty", { x: 0, y: 0, w: W.PATCH, h: W.PATCH }, t, (g) => D.emptyPlot(g, slot));
+      if (slot === firstFreeSlot()) {
+        inZone(ctx, null, "empty", { x: 0, y: 0, w: W.PATCH, h: W.PATCH }, t, (g) => D.emptyPlot(g, slot));
+      }
       W.drawFence(ctx);
       ctx.restore();
       W.drawNamePlate(ctx, r, "Plot " + String(slot).padStart(2, "0"), true);

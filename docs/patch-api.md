@@ -100,7 +100,7 @@ garden: {
 
 ## `thought`
 
-A short string. It wraps to 3 lines at most (roughly 40 characters), and emoji work.
+A short string. It wraps to 4 lines at most (roughly 70 characters), and emoji work.
 
 ## `pet`
 

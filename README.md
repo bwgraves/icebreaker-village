@@ -16,6 +16,41 @@ It's plain HTML, CSS and JavaScript, with no build step and no dependencies.
 
 ## For the host
 
+> [!IMPORTANT]
+> **Everyone taking part must be added as a collaborator on the GitHub repo before the meeting.** Without it, they can clone and check out the branch but **can't push their patch**: they'll get a 403 / "Permission denied" error. See the setup steps below.
+
+### One-off GitHub setup: let people push
+
+GitHub only lets people push to a repo if they have **write access**. Branch rules (rulesets) can't open a repo up to everyone; they can only *restrict* people who already have access. So setup has two parts: give participants write access, then use rulesets to keep `main` safe.
+
+**1. Add every participant as a collaborator (required)**
+
+- **Repo under your personal account:**
+  1. Go to **Settings → Collaborators → Add people** and invite each participant by GitHub username or email.
+  2. They need to **accept the invite**, either from the email or at `https://github.com/<owner>/icebreaker-village/invitations`, before they can push.
+  3. Do this before the meeting. Pushes fail with a 403 / "Permission denied" until the invite is accepted.
+- **Repo in a GitHub organisation (easier for a whole team):**
+  1. Create a team (e.g. `icebreakers`).
+  2. In the repo, go to **Settings → Collaborators and teams → Add teams** and give the team the **Write** role.
+  3. Anyone you add to the team can push straight away, with no per-person invite to accept.
+
+**2. Protect `main` with rulesets**
+
+Go to **Settings → Rules → Rulesets → New ruleset → New branch ruleset** and create two rulesets.
+
+| Ruleset | Target branches | Rules to tick | Bypass list |
+| --- | --- | --- | --- |
+| `protect-main` | *Include default branch* | Restrict deletions · Block force pushes · Require a pull request before merging | Repository admin (you) |
+| `session-branches` | *Include by pattern:* `icebreaker/**` | Restrict deletions · Block force pushes | Repository admin (you) |
+
+Set both to **Active**. Participants can then push ordinary commits to session branches. Nobody else can change `main`, delete a session branch or rewrite its history, so one person's mistake can't wipe out everyone's patches. The agent playbook never needs a force push.
+
+Rulesets are free on public repos. Private repos need GitHub Pro, Team or Enterprise.
+
+**Someone you can't add as a collaborator?** They can fork the repo, push their patch to their fork, and open a pull request into the session branch for you to merge.
+
+### Running a session
+
 1. Create a branch for the session and push it:
    ```sh
    git checkout main && git pull
@@ -23,32 +58,33 @@ It's plain HTML, CSS and JavaScript, with no build step and no dependencies.
    git push -u origin icebreaker/2026-11-23-design-team
    ```
 2. Share the repo URL and the branch name with everyone.
-3. Open the village and share your screen. Every few minutes, `git pull` and refresh to watch new neighbours move in.
-4. Afterwards, leave the branch as a keepsake. **Don't merge session branches into `main`.** `main` should always be an empty village.
+3. Open `index.html` and share your screen. Every few minutes, `git pull` and refresh the page to watch new neighbours move in.
+4. Afterwards, leave the branch as a keepsake. **Don't merge session branches into `main`.** `main` should always be an empty village. If you like, remove the collaborators afterwards.
 
 Tip: if the repo is on GitHub, you can enable GitHub Pages for the session branch so everyone can see the village at a URL without running anything.
 
 ## For participants
 
-1. Clone the repo (if you haven't already), then check out the session branch:
+1. Make sure your host has **added you as a collaborator** on the GitHub repo, and **accept the invite** from the email or at `https://github.com/<owner>/icebreaker-village/invitations`. You can't push your patch without this.
+2. Clone the repo (if you haven't already), then check out the session branch:
    ```sh
+   git clone https://github.com/<owner>/icebreaker-village.git
+   cd icebreaker-village
    git fetch origin
    git checkout icebreaker/2026-11-23-design-team
    ```
-2. Open your AI coding agent (Claude Code, Codex, Cursor, Copilot, …) in the repo and say:
+3. Open your AI coding agent (Claude Code, Codex, Cursor, Copilot, …) in the repo and say:
    > Read AGENTS.md and add me to Icebreaker Village.
-3. Answer its questions, then admire your patch.
+4. Answer its questions. There are no wrong answers, so be as imaginative as you like.
+5. Open `index.html` and admire your patch.
 
 The agent claims the next free patch, commits and pushes. If two people grab the same patch at the same moment, the second one moves to the next free patch automatically.
 
 You can also do it all by hand. Copy `patches/_template` to the next free number, then read [`docs/patch-api.md`](docs/patch-api.md).
 
-## Running it locally
+## Opening the village
 
-Either:
-
-- double-click `index.html`, or
-- run `python3 -m http.server 8000` and open <http://localhost:8000> (or use `npx serve`).
+Just open `index.html` in your browser by double-clicking it. There's nothing to install and no server to run. Refresh the page to pick up changes.
 
 Controls:
 

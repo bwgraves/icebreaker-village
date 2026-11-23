@@ -10,6 +10,8 @@
   const V = (window.Village = window.Village || {});
 
   const FONT = '"Press Start 2P", ui-monospace, monospace';
+  // Narrower, more readable pixel font for longer text (thought bubbles).
+  const BODY_FONT = '"Pixelify Sans", system-ui, sans-serif';
   const cache = new Map();
   const CACHE_LIMIT = 4000;
   const warned = new Set();
@@ -79,21 +81,21 @@
     return { x, y, w, h };
   }
 
-  function setFont(ctx, sizePx) {
-    ctx.font = `${sizePx}px ${FONT}`;
+  function setFont(ctx, sizePx, family) {
+    ctx.font = `${family === "body" ? "600 " : ""}${sizePx}px ${family === "body" ? BODY_FONT : FONT}`;
   }
 
   function text(ctx, str, x, y, opts) {
     opts = opts || {};
-    setFont(ctx, opts.size || 8);
+    setFont(ctx, opts.size || 8, opts.font);
     ctx.textBaseline = "top";
     ctx.textAlign = opts.align || "left";
     ctx.fillStyle = opts.color || "#222";
     ctx.fillText(String(str), x, y);
   }
 
-  function measure(ctx, str, sizePx) {
-    setFont(ctx, sizePx || 8);
+  function measure(ctx, str, sizePx, family) {
+    setFont(ctx, sizePx || 8, family);
     return ctx.measureText(String(str)).width;
   }
 
@@ -119,7 +121,7 @@
     };
   }
 
-  V.Pixel = { FONT, size, render, draw, text, measure, hash, rng, warnOnce };
+  V.Pixel = { FONT, BODY_FONT, size, render, draw, text, measure, hash, rng, warnOnce };
 
   // Convenience for patch authors: define a sprite once, reuse it anywhere.
   V.sprite = function (pixels, palette) {
@@ -129,5 +131,6 @@
   // Kick off the pixel font download so canvas text picks it up.
   if (document.fonts && document.fonts.load) {
     document.fonts.load(`8px ${FONT}`).catch(() => {});
+    document.fonts.load(`600 11px ${BODY_FONT}`).catch(() => {});
   }
 })();

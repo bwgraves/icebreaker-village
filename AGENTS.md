@@ -2,7 +2,17 @@
 
 You're helping a person move into **Icebreaker Village**, a static 8‑bit village used as a team icebreaker. Each person gets one square patch. They put themself, a house, a back garden, a thought bubble and a pet in it. Everyone is pushing to the same git branch at the same time, so follow the claiming steps below carefully.
 
-**The point is conversation.** Ask the person short, fun questions as you go: what their dream house looks like, what pet they'd adopt, what people could ask them about. Turn their answers into their patch. Don't just invent everything yourself.
+**The point is conversation and creativity.** The person should dream their patch up; your job is to bring it to life. Turn their answers into their patch, and don't invent things for them.
+
+## How to ask questions (important)
+
+- **Ask open-ended questions in plain text, and let the person type their own answer.**
+  - Good: *"Describe your dream house. It can be anything at all."*
+  - Bad: *"Which house would you like? (a) cottage (b) castle (c) treehouse"*
+- **Never give a list of options, a multiple-choice menu or numbered choices.** If your harness has a question or option-picker tool, don't use it here. Just write the question as a normal message and wait for the reply.
+- **Don't suggest examples up front.** They anchor people towards the same few ideas. Only offer a gentle nudge if the person says they're stuck, and even then keep it to one playful prompt, not a menu. For example: *"What would 8-year-old you have wanted?"*
+- **Ask one question at a time.** Once they've answered, a short follow-up is fine (*"Ooh, what colour is the door?"*).
+- **Take what they say and run with it, however silly.** A house shaped like a teapot is a great answer.
 
 ## Ground rules
 
@@ -23,7 +33,7 @@ If you don't know the session branch name, ask the person.
 
 ## Step 2: Ask for a name
 
-Ask: *"What name should go on your name plate?"* A first name or nickname is fine, up to about 18 characters.
+Ask: *"What name should go on your name plate?"* Any first name or nickname is fine, up to about 18 characters.
 
 ## Step 3: Claim a patch (do this straight away, before any drawing)
 
@@ -46,7 +56,11 @@ Ask: *"What name should go on your name plate?"* A first name or nickname is fin
    git push origin <session-branch>
    ```
 
-### If the push is rejected
+### If the push fails with a permissions error (403 / "Permission denied")
+
+The person hasn't been added as a collaborator on the GitHub repo, or hasn't accepted the invite yet. Stop and tell them to ask the host to add them as a collaborator, then accept the invite at `https://github.com/<owner>/icebreaker-village/invitations`. Their commit is safe locally: once they have access, just push again. Don't try to work around it.
+
+### If the push is rejected (someone else pushed first)
 
 Run `git pull --rebase`.
 
@@ -69,22 +83,21 @@ The same recovery works later on. All of your person's work lives in one folder,
 
 ## Step 4: The checklist
 
-Do these in order. For each one: ask a question or two, build it, let the person look, then commit and push (`git pull --rebase` first).
+Do these in order. For each one: ask an open question (see **How to ask questions** above), build it, let the person look, then commit and push (`git pull --rebase` first).
 
-1. **Add your 8‑bit self and style yourself.** Ask about hair, outfit, glasses, a favourite colour or an accessory. This goes in `character`: about 12×20 pixels in the front yard. Two animation `frames` (a wave, a blink) are a nice touch.
-2. **Build yourself a house.** Ask about their dream home: cottage, castle, treehouse, houseboat, igloo? This goes in `house`, a zone of 152×56. Aim for roughly 60 wide.
-3. **Zhuzh your back garden.** Ask what they'd grow or put out there: veg patch, pond, hot tub, hammock, garden gnomes? This goes in `garden`, a 152×40 strip at the top. Use `g.rng(seed)` for scattering things.
-4. **Give your character a thought bubble.** Ask for a fun fact, a hot take, or something people can ask them about. This goes in `thought`: a short string of up to about 40 characters, and emoji work.
-5. **Adopt a pet.** Ask what pet they'd adopt and what it's called. This goes in `pet`: about 10×8 pixels, drawn facing right, with `wander: true` to let it roam.
+| # | Task | Ask something like | Where it goes |
+| --- | --- | --- | --- |
+| 1 | **Add your 8‑bit self and style yourself** | *"How would you like to look in the village? Describe your 8-bit self."* | `character`: about 12×20 pixels in the front yard. Two animation `frames` (a wave, a blink) are a nice touch. |
+| 2 | **Build yourself a house** | *"Describe your dream house. It can be anything at all."* | `house`: a zone of 152×56. Aim for roughly 60 wide. |
+| 3 | **Zhuzh your back garden** | *"What's in your back garden?"* | `garden`: a 152×40 strip at the top. Use `g.rng(seed)` for scattering things. |
+| 4 | **Give your character a thought bubble** | *"What's on your mind? Or what should people ask you about?"* | `thought`: a short string of up to about 70 characters, and emoji work. |
+| 5 | **Adopt a pet** | *"Tell me about your pet, real or imaginary. What's it called?"* | `pet`: about 10×8 pixels, drawn facing right, with `wander: true` to let it roam. |
 
 Commit messages should be friendly and specific, for example `Sam builds a lighthouse in patch 04`.
 
 ## Step 5: Check it
 
-Open the village and find the patch:
-
-- Double-click `index.html`, or
-- Run `python3 -m http.server 8000` and visit <http://localhost:8000> (or use `npx serve`).
+Open `index.html` in a browser: double-click it, or run `open index.html` (macOS), `start index.html` (Windows) or `xdg-open index.html` (Linux). There's no server or install step. After changes, just refresh the page.
 
 If you can take screenshots or drive a browser, look at the result yourself. Also check the browser console: errors and pixel-map warnings start with `[Icebreaker Village]`. A part showing an **OOPS!** sign threw an error.
 

@@ -26,7 +26,7 @@ Village.patch({
   // ☐ 3. Zhuzh your back garden (top strip, 152×40).
   // garden: { draw(g, t) { ... } },
 
-  // ☐ 4. Give your character a thought bubble (keep it short!).
+  // ☐ 4. Give your character a thought bubble (up to about 70 characters).
   // thought: "Ask me about ...",
 
   // ☐ 5. Adopt a pet (front yard, about 10×8 pixels).
