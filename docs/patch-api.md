@@ -77,6 +77,8 @@ This is called every frame, already translated and clipped to the zone.
 | `g.t` / `t` | Time in seconds, for animation |
 | `g.rect(x, y, w, h, colour)` | Filled rectangle |
 | `g.px(x, y, colour)` | Single pixel |
+| `g.circle(cx, cy, r, colour)` | Filled pixel circle: trees, ponds, suns, heads |
+| `g.triangle(x, y, w, h, colour)` | Filled triangle pointing up, inside that box: roofs, trees, mountains |
 | `g.sprite(sprite, x, y, opts?)` | Draw a `Village.sprite(...)`. `opts`: `{ scale, flip }` |
 | `g.sprite(pixels, palette, x, y, opts?)` | Same, with an inline pixel-map |
 | `g.text(str, x, y, { size, color, align }?)` | Pixel-font text. Size 8 is the default and fits about 18 chars across a patch |

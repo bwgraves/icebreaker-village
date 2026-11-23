@@ -65,6 +65,10 @@ Tip: if the repo is on GitHub, you can enable GitHub Pages for the session branc
 
 ## For participants
 
+**What you need:** git, a web browser and an AI coding agent. You don't need Node, npm, Python or anything else.
+- On a Mac, git and bash come with the Command Line Tools: run `git --version` and accept the install prompt if one appears.
+- On Windows, install [Git for Windows](https://git-scm.com/download/win), which includes Git Bash.
+
 1. Make sure your host has **added you as a collaborator** on the GitHub repo, and **accept the invite** from the email or at `https://github.com/<owner>/icebreaker-village/invitations`. You can't push your patch without this.
 2. Clone the repo (if you haven't already), then check out the session branch:
    ```sh
@@ -75,12 +79,16 @@ Tip: if the repo is on GitHub, you can enable GitHub Pages for the session branc
    ```
 3. Open your AI coding agent (Claude Code, Codex, Cursor, Copilot, …) in the repo and say:
    > Read AGENTS.md and add me to Icebreaker Village.
-4. Answer its questions. There are no wrong answers, so be as imaginative as you like.
-5. Open `index.html` and admire your patch.
+4. It asks you six quick questions in one go. Answer in a few words each; there are no wrong answers, so be as imaginative as you like.
+5. Let it build and publish (usually a minute or two), then open `index.html` and admire your patch.
 
-The agent claims the next free patch, commits and pushes. If two people grab the same patch at the same moment, the second one moves to the next free patch automatically.
+The agent writes your patch in `patches/_draft/`, then runs `scripts/move-in.sh`. That script takes the next free plot, commits and pushes. If two people move in at the same moment, the second one is automatically moved to the next free plot.
 
-You can also do it all by hand. Copy `patches/_template` to the next free number, then read [`docs/patch-api.md`](docs/patch-api.md).
+**Doing it by hand:**
+1. Copy `patches/_template/patch.js` to `patches/_draft/patch.js`.
+2. Edit it. The cheat sheet at the top of the file explains how, and [`docs/patch-api.md`](docs/patch-api.md) has the full details.
+3. Run `bash scripts/move-in.sh`.
+4. For later changes, run `bash scripts/save.sh "what changed"`.
 
 ## Opening the village
 
@@ -100,8 +108,10 @@ Controls:
 index.html, style.css     the page and the welcome modal
 src/                      the engine: pixel helpers, world, patch API, loader, camera
 patches/NN/patch.js       one resident per numbered folder
-patches/_template/        what each new resident starts from
-patches/_example/         a finished example patch
+patches/_template/        a complete starter patch with an API cheat sheet
+patches/_draft/           your work-in-progress patch (gitignored)
+scripts/move-in.sh        publishes your draft as the next free plot (handles clashes)
+scripts/save.sh           commits and pushes later tweaks to your patch
 docs/patch-api.md         everything a patch can do
 AGENTS.md                 the step-by-step playbook for AI agents (CLAUDE.md points to it)
 ```
